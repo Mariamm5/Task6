@@ -1,16 +1,19 @@
 <?php
+session_start();
 include_once __DIR__ . '/../models/AddBooksModel.php';
 include_once __DIR__ . '/../Database.php';
-
 $data = new Database();
 $db = $data->getConnection();
 $bookModel = new AddBooksModel($db);
 $booksList = $bookModel->getBooks();
-//echo "10";
+$getBookById = null;
+
+
 class AddBooksController
 {
     private $db;
     private $book;
+
 
     public function __construct($db)
     {
@@ -29,21 +32,29 @@ class AddBooksController
 
     }
 
-    public function updateBook($newTitle, $newAuthor, $newDescription, $newPrice, $newImg_path, $id)
+    public function updateBook($newTitle, $newAuthor, $newDescription, $newPrice, $newImgPath, $id)
     {
         $this->book->newTitle = $newTitle;
         $this->book->newAuthor = $newAuthor;
         $this->book->newDescription = $newDescription;
         $this->book->newPrice = $newPrice;
-        $this->book->newImg_path = $newImg_path;
+        $this->book->newImg_path = $newImgPath;
         $this->book->id = $id;
         return $this->book->updateBook();
 
+    }
 
+    public function deleteBook($id)
+    {
+        return $this->book->deleteBook($id);
+    }
+
+    public function getBookById($id)
+    {
+        return $this->book->getBookById($id);
     }
 }
 
-///////////////get the books in data
 
 if (isset($_POST['addBook'])) {
     $title = $_POST['title'];
@@ -66,32 +77,43 @@ if (isset($_POST['addBook'])) {
     }
 
 }
-//////////////////////////////////////////////////////////////////////////
-////////upDate book info
 
-if (isset($_POST['edited'])) {
-    if (isset($_GET['?=id'])) {
-        $id = $_GET['id'];
-        echo $id;
+if (isset($_POST['edited']) && $_SESSION['id']) {
+    $id = $_SESSION['id'];
+    $newTitle = $_POST['newTitle'];
+    $newAuthor = $_POST['newAuthor'];
+    $newDescription = $_POST['newDescription'];
+    $newPrice = $_POST['newPrice'];
 
-        $newTitle = $_POST['newTitle'];
-        $newAuthor = $_POST['newAuthor'];
-        $newDescription = $_POST['newDescription'];
-        $newPrice = $_POST['newPrice'];
-
-        $newImgPath = '';
-        if (isset($_FILES['newImg'])) {
-            $uploadDir = '../assets/img/';
-            $newImgPath = $uploadDir . basename($_FILES['newImg']['name']);
-            move_uploaded_file($_FILES['newImg']['tmp_name'], $newImgPath);
-        }
-        $updatedBookList = new AddBooksController($db);
-        if ($updatedBookList->updateBook($newTitle, $newAuthor, $newDescription, $newPrice, $newImgPath, $id)) {
-            header("Location:../views/admin/BooksListAdmin");
-        } else {
-            echo "Cant update book";
-        }
+    $newImgPath = '';
+    if (isset($_FILES['newImg'])) {
+        $uploadDir = '../assets/img/';
+        var_dump($_FILES);
+        $newImgPath = $uploadDir . basename($_FILES['newImg']['name']);
+        move_uploaded_file($_FILES['newImg']['tmp_name'], $newImgPath);
     }
+    $updatedBookList = new AddBooksController($db);
+    if ($updatedBookList->updateBook($newTitle, $newAuthor, $newDescription, $newPrice, $newImgPath, $id)) {
+        header("Location:../views/admin/BooksListAdmin.php");
+    } else {
+        echo "Cant update book";
+    }
+}
+
+if (isset($_POST['delete']) && $_SESSION['id']) {
+    $id = $_SESSION['id'];
+    $delete = new AddBooksController($db);
+    $delete->deleteBook($id);
+    header("Location:../views/admin/BooksListAdmin.php");
+}
+if (isset($_POST['logOut'])) {
+    session_destroy();
+    $_SESSION['admin'] = '';
+    header("Location:../views/admin/AdminLogin.php");
 
 }
 
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $getBookById = $bookModel->getBookById($id);
+}

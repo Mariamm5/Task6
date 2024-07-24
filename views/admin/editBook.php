@@ -1,8 +1,7 @@
 <?php
 session_start();
-require_once "../../controllers/AddBooksController.php";
-
-?>
+$_SESSION['id'] = $_GET['id'];
+$id = $_GET['id']; ?>
 
 <!doctype html>
 <html lang="en">
@@ -18,15 +17,17 @@ require_once "../../controllers/AddBooksController.php";
 <div class="container mt-5">
     <a href="BooksListAdmin.php" class="btn btn-secondary mb-3">Back to Books List</a>
     <h1 class="mb-4">Edit Book</h1>
-    <h2>Book ID is: <?= $_GET['id'] ?></h2>
     <form action="../../controllers/AddBooksController.php" method="POST" enctype="multipart/form-data">
+        <h2>Book ID is: <?= $id ?></h2>
         <div class="form-group">
             <label for="newTitle">Book Title</label>
-            <input type="text" class="form-control" id="newTitle" name="newTitle" placeholder="Enter new title" required>
+            <input type="text" class="form-control" id="newTitle" name="newTitle" placeholder="Enter new title"
+                   required>
         </div>
         <div class="form-group">
             <label for="newAuthor">Author</label>
-            <input type="text" class="form-control" id="newAuthor" name="newAuthor" placeholder="Enter new author"required>
+            <input type="text" class="form-control" id="newAuthor" name="newAuthor" placeholder="Enter new author"
+                   required>
         </div>
         <div class="form-group">
             <label for="newDescription">Description</label>
@@ -35,7 +36,8 @@ require_once "../../controllers/AddBooksController.php";
         </div>
         <div class="form-group">
             <label for="newPrice">Price</label>
-            <input type="text" class="form-control" id="newPrice" name="newPrice" placeholder="Enter new price" required>
+            <input type="text" class="form-control" id="newPrice" name="newPrice" placeholder="Enter new price"
+                   required>
         </div>
         <div class="form-group">
             <label for="newImg">Image</label>

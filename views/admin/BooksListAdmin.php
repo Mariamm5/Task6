@@ -80,11 +80,19 @@ global $id;
 
             <div class="buttons">
                 <a href="editBook.php?id=<?= $book['id'] ?>" class="btn btn-primary">
-                    <ion-icon name="create"></ion-icon> Edit
+                    <ion-icon name="create"></ion-icon>
+                    Edit
                 </a>
-                <button type="button" class="btn btn-danger" style="margin-left: 5px;">
-                    <ion-icon name="trash"></ion-icon> Delete
-                </button>
+                <form method="post" action="../../controllers/AddBooksController.php" style="margin-left: 5px;">
+                    <a href="editBook.php?id=<?= $book['id'] ?>">
+                        <button type="submit" name="delete" class="btn btn-danger"
+                                onclick="return confirm('Are you sure you want to delete this book?');">
+                            <ion-icon name="trash"></ion-icon>
+                            Delete
+                        </button>
+                    </a>
+
+                </form>
             </div>
         </div>
     </div>

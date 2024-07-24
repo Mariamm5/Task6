@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../Database.php';
+//require_once __DIR__ . '/../Database.php';
 
 class AddBooksModel
 {
@@ -50,18 +50,34 @@ class AddBooksModel
     public function updateBook()
     {
         $query = "UPDATE $this->tableName
-        SET title = :title,author = :author,description = :description , price = :price,image_path=:image_path
-        WHERE id = :id";
-
+        SET title=:newTitle,author=:newAuthor,description=:newDescription,price=:newPrice,image_path=:newImg_path
+        WHERE id=:id";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":title", $this->newTitle);
-        $stmt->bindParam(":author", $this->newAuthor);
-        $stmt->bindParam(":description", $this->newDescription);
-        $stmt->bindParam(":price", $this->newPrice);
-        $stmt->bindParam(":image_path", $this->newImg_path);
+        $stmt->bindParam(":newTitle", $this->newTitle);
+        $stmt->bindParam(":newAuthor", $this->newAuthor);
+        $stmt->bindParam(":newDescription", $this->newDescription);
+        $stmt->bindParam(":newPrice", $this->newPrice);
+        $stmt->bindParam(":newImg_path", $this->newImg_path);
         $stmt->bindParam(":id", $this->id);
         return $stmt->execute();
     }
 
-}
+    public function deleteBook($id)
+    {
+        $query = "DELETE FROM $this->tableName WHERE id= $id";
+        $stmt = $this->conn->prepare($query);
+//        $stmt->bindParam(":id", $id);
+        return $stmt->execute();
 
+    }
+
+    public function getBookById($id)
+    {
+        $query = "SELECT * FROM {$this->tableName} WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+}

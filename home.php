@@ -12,7 +12,7 @@
 <div class="container text-center mt-5">
     <h1 class="mb-4">Hello To "BookSpace"</h1>
     <a href="views/admin/AdminLogin.php" class="btn btn-primary mr-2">Login As Admin</a>
-    <a href="views/BooksList.php" class="btn btn-secondary">See The Books</a>
+    <a href="views/user/BooksList.php" class="btn btn-secondary">See The Books</a>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
